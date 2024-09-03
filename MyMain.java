@@ -3,49 +3,47 @@ import java.util.LinkedList;
 
 public class MyMain {
 
-    public static void store(InputStream input, LinkedList<Person> list) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] parts = line.split(",");
-            if (parts.length == 3) {
-                String firstName = parts[0].trim();
-                String lastName = parts[1].trim();
-                String id = parts[2].trim();
-                Person person = new Person(firstName, lastName, id);
-                list.add(person);
+    public static void store(InputStream input, LinkedList<Person> list) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    Person person = new Person(parts[0], parts[1], parts[2]);
+                    list.add(person);
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public static void display(PrintStream output, LinkedList<Person> list) {
-        for (Person person : list) {
-            output.println(person);
+        for (int i = 0; i < list.size(); i++) {
+            output.println(list.get(i));
         }
     }
 
     public static int find(String sid, LinkedList<Person> list) {
+        int foundIndex = -1;
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId().equals(sid)) {
-                return i;
+            Person person = list.get(i);
+            if (person.getId().equals(sid)) {
+                foundIndex = i;
+                break;
             }
         }
-        return -1;
+        return foundIndex;
     }
 
     public static void main(String[] args) {
         LinkedList<Person> persons = new LinkedList<>();
-        
-        
+
         String data = "John,Doe,12345\nJane,Smith,67890\nAlice,Jones,13579\n";
         InputStream input = new ByteArrayInputStream(data.getBytes());
 
-        try {
-            store(input, persons);
-        } catch (IOException e) {
-            System.err.println("Error storing data: " + e.getMessage());
-        }
-
+        store(input, persons);
         display(System.out, persons);
 
         String searchId = "67890";
