@@ -10,48 +10,73 @@ public class MyMain {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 3) {
-                    Person person = new Person(parts[0], parts[1], parts[2]);
+                    String firstName = parts[0];
+                    String lastName = parts[1];
+                    String id = parts[2];
+                    Person person = new Person(firstName, lastName, id);
                     list.add(person);
+                } else {
+                    System.out.println("Invalid input format, please use 'firstName,lastName,id'");
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("An error occurred while reading input.");
         }
     }
 
     public static void display(PrintStream output, LinkedList<Person> list) {
         for (int i = 0; i < list.size(); i++) {
-            output.println(list.get(i));
+            Person person = list.get(i);
+            output.println(person.toString());
         }
     }
 
     public static int find(String sid, LinkedList<Person> list) {
-        int foundIndex = -1;
         for (int i = 0; i < list.size(); i++) {
             Person person = list.get(i);
             if (person.getId().equals(sid)) {
-                foundIndex = i;
-                break;
+                return i;
             }
         }
-        return foundIndex;
+        return -1;
     }
 
     public static void main(String[] args) {
         LinkedList<Person> persons = new LinkedList<>();
+        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
-        String data = "John,Doe,12345\nJane,Smith,67890\nAlice,Jones,13579\n";
-        InputStream input = new ByteArrayInputStream(data.getBytes());
+        System.out.println("Enter person data (firstName,lastName,id). Type 'done' when finished:");
 
-        store(input, persons);
+        try {
+            String inputLine;
+            inputLine = consoleReader.readLine();
+            while (!inputLine.equalsIgnoreCase("done")) {
+                InputStream input = new ByteArrayInputStream(inputLine.getBytes());
+                store(input, persons);
+                inputLine = consoleReader.readLine();
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading input.");
+        }
+
         display(System.out, persons);
 
-        String searchId = "67890";
-        int index = find(searchId, persons);
-        if (index != -1) {
-            System.out.println("Person with ID " + searchId + " found at index " + index);
-        } else {
-            System.out.println("Person with ID " + searchId + " not found.");
+        try {
+            String searchId;
+            System.out.println("Enter an ID to search for (type 'exit' to quit):");
+            searchId = consoleReader.readLine();
+            while (!searchId.equalsIgnoreCase("exit")) {
+                int index = find(searchId, persons);
+                if (index != -1) {
+                    System.out.println("Person with ID " + searchId + " found at index " + index);
+                } else {
+                    System.out.println("Person with ID " + searchId + " not found.");
+                }
+                System.out.println("Enter an ID to search for (type 'exit' to quit):");
+                searchId = consoleReader.readLine();
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading input.");
         }
     }
 }
