@@ -1,3 +1,4 @@
+package Hw1Q2;
 public class Person {
     private String firstName;
     private String lastName;

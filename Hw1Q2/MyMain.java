@@ -1,3 +1,4 @@
+package Hw1Q2;
 import java.io.*;
 import java.util.LinkedList;
 
