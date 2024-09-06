@@ -1,42 +1,32 @@
+package Hw1Q3;
 import java.io.*;
 import java.io.FileNotFoundException;
 import java.util.*;
 //import linked list class
 import java.util.LinkedList;
+import java.util.stream.Stream;
 
-public class Person {
+import Hw1Q2.Person;
 
-  //string fields
-  private String firstName;
-  private String lastName;
-  private int Id;
+public class PersonList {
+    
+    //list variable on the class
+    private LinkedList<Person> list;
+    
+    //constructor
+    PersonList()
+    {
+        list = new LinkedList<Person>();
+    }
 
-  //constructor
-  Person(String fname, String lname, int id){
-    firstName = fname;
-    lastName = lname;
-    Id = id;
-  }
+    //Access method for the list
+    public LinkedList<Person> getList()
+    {
+        return list;
+    }
 
-//Accessor methods
-  public String getFirstName(){
-    return firstName;
-  }
-  public String getLastName(){
-    return lastName;
-  }
-  public int getId(){
-    return Id;
-  }
-
-  //to string method
-  public String toString(){
-    return "First Name: " + firstName + " Last Name: " + lastName + " Id:" + Id ;
-  }
-}
-
-class MyMain {
-    public static void store (Scanner scanner, LinkedList<Person> list)
+    //store method used in other question as method
+    public void store (Scanner scanner)
     {
       while (scanner.hasNextLine()) {
           String[] parts = scanner.nextLine().split(",");
@@ -44,13 +34,16 @@ class MyMain {
       }
     }
 
-    public static void display (PrintStream outputStream, LinkedList<Person> list)
+    //display method used in other question as a method
+    public void display (PrintStream outputStream)
     {
         for (int i = 0; i < list.size(); i++) { 
             outputStream.println(list.get(i).toString()); 
         }
     }
-    public static int find (int sid, LinkedList<Person> list) 
+
+    //find function used in other question as a method
+    public int find (int sid) 
     {
         for (int i=0; i < list.size(); i++)
         {
@@ -61,12 +54,16 @@ class MyMain {
         }
         return -1;
     }
+}
+
+class MyMainQ3 {
     public static void main(String[] args) throws FileNotFoundException {
       String fileName1, outFileName;
       File dataFile1, outFile;
-      boolean hasNext1 = false, hasNext2 = false;
-      LinkedList<Person> personList = new LinkedList<>();
+      //Create the inital person list object
+      PersonList personList = new PersonList();
       Scanner keyScanner = new Scanner(System.in);
+      //Get neede files
       System.out.println("Please enter the input file name: ");
       fileName1 = keyScanner.nextLine();
       System.out.println("Please enter the output file name: ");
@@ -75,14 +72,16 @@ class MyMain {
       outFile = new File(outFileName);
       Scanner fileScanner1 = new Scanner(dataFile1);
       PrintStream printer = new PrintStream(outFile);
-      store(fileScanner1, personList);
+      //Call store to fill the personList object
+      personList.store(fileScanner1);
       System.out.println("Displaying all persons:");
-      display(printer, personList);
+      //Call display to print personList object on document
+      personList.display(printer);
       int[] testIds = {12345, 67890, 11111};
       for (int id : testIds) {
-        int index = find(id, personList);
+        int index = personList.find(id);
         if (index != -1) {
-            System.out.println("Person with Id " + id + " was found: "+ personList.get(index).toString());
+            System.out.println("Person with Id " + id + " was found: "+ personList.getList().get(index).toString());
         } else {
             System.out.println("Person with Id " + id + " not found.");
         }
