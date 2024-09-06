@@ -3,40 +3,23 @@ import java.io.FileNotFoundException;
 import java.util.*;
 //import linked list class
 import java.util.LinkedList;
+import java.util.stream.Stream;
 
-public class Person {
+public class PersonList {
+    
+    private LinkedList<Person> list;
+    
+    PersonList()
+    {
+        list = new LinkedList<Person>();
+    }
 
-  //string fields
-  private String firstName;
-  private String lastName;
-  private int Id;
+    public LinkedList<Person> getList()
+    {
+        return list;
+    }
 
-  //constructor
-  Person(String fname, String lname, int id){
-    firstName = fname;
-    lastName = lname;
-    Id = id;
-  }
-
-//Accessor methods
-  public String getFirstName(){
-    return firstName;
-  }
-  public String getLastName(){
-    return lastName;
-  }
-  public int getId(){
-    return Id;
-  }
-
-  //to string method
-  public String toString(){
-    return "First Name: " + firstName + " Last Name: " + lastName + " Id:" + Id ;
-  }
-}
-
-class MyMain {
-    public static void store (Scanner scanner, LinkedList<Person> list)
+    public void store (Scanner scanner)
     {
       while (scanner.hasNextLine()) {
           String[] parts = scanner.nextLine().split(",");
@@ -44,13 +27,13 @@ class MyMain {
       }
     }
 
-    public static void display (PrintStream outputStream, LinkedList<Person> list)
+    public void display (PrintStream outputStream)
     {
         for (int i = 0; i < list.size(); i++) { 
             outputStream.println(list.get(i).toString()); 
         }
     }
-    public static int find (int sid, LinkedList<Person> list) 
+    public int find (int sid) 
     {
         for (int i=0; i < list.size(); i++)
         {
@@ -61,11 +44,14 @@ class MyMain {
         }
         return -1;
     }
+}
+
+class MyMainQ3 {
     public static void main(String[] args) throws FileNotFoundException {
       String fileName1, outFileName;
       File dataFile1, outFile;
       boolean hasNext1 = false, hasNext2 = false;
-      LinkedList<Person> personList = new LinkedList<>();
+      PersonList personList = new PersonList();
       Scanner keyScanner = new Scanner(System.in);
       System.out.println("Please enter the input file name: ");
       fileName1 = keyScanner.nextLine();
@@ -75,14 +61,14 @@ class MyMain {
       outFile = new File(outFileName);
       Scanner fileScanner1 = new Scanner(dataFile1);
       PrintStream printer = new PrintStream(outFile);
-      store(fileScanner1, personList);
+      personList.store(fileScanner1);
       System.out.println("Displaying all persons:");
-      display(printer, personList);
+      personList.display(printer);
       int[] testIds = {12345, 67890, 11111};
       for (int id : testIds) {
-        int index = find(id, personList);
+        int index = personList.find(id);
         if (index != -1) {
-            System.out.println("Person with Id " + id + " was found: "+ personList.get(index).toString());
+            System.out.println("Person with Id " + id + " was found: "+ personList.getList().get(index).toString());
         } else {
             System.out.println("Person with Id " + id + " not found.");
         }
