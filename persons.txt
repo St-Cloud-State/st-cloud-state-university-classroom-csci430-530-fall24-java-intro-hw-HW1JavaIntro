@@ -1,4 +1,0 @@
-John,Doe,12345
-Jane,Smith,67890
-Alice,Jones,13579
-Bob,Brown,24680
